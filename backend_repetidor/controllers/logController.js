@@ -1,41 +1,11 @@
-const Log = require('../models/Log');
+const RepeaterLog = require('../models/RepeaterLog');
 
 exports.createLog = async (req, res) => {
-  try {
-    const log = new Log(req.body);
-    await log.save();
-    res.status(201).json({ message: 'Log criado com sucesso' });
-  } catch (err) {
-    res.status(500).json({ message: 'Erro ao criar log' });
-  }
+  const log = await RepeaterLog.create(req.body);
+  res.status(201).json(log);
 };
 
 exports.getLogs = async (req, res) => {
-  try {
-    const logs = await Log.find().sort({ timestamp: -1 });
-    res.json(logs);
-  } catch (err) {
-    res.status(500).json({ message: 'Erro ao buscar logs' });
-  }
-};
-
-exports.getRepetidoresStatus = async (req, res) => {
-  try {
-    const latestLogs = await Log.aggregate([
-      { $sort: { timestamp: -1 } },
-      {
-        $group: {
-          _id: '$id_repetidor',
-          status: { $first: '$status' },
-          tensao: { $first: '$tensao' },
-          latitude: { $first: '$latitude' },
-          longitude: { $first: '$longitude' },
-          timestamp: { $first: '$timestamp' },
-        },
-      },
-    ]);
-    res.json(latestLogs);
-  } catch (err) {
-    res.status(500).json({ message: 'Erro ao buscar status dos repetidores' });
-  }
+  const logs = await RepeaterLog.find().sort({ timestamp: -1 });
+  res.json(logs);
 };
