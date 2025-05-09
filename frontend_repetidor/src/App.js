@@ -4,7 +4,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import MapView from './components/MapView';
 import AdminPanel from './components/AdminPanel';
-import { isAuthenticated, getUserRole } from './util/auth';
+import { isAuthenticated, getUserRole } from './utils/auth';
 
 function PrivateRoute({ children, roles }) {
   if (!isAuthenticated()) return <Navigate to="/login" />;
