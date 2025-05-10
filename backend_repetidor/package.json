@@ -10,8 +10,7 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.11.2"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build"
-  }
+"scripts": {
+  "start": "node app.js"
+}
 }
