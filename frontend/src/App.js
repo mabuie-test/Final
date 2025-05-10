@@ -1,17 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './components/Login';
-import Dashboard from './components/Dashboard';
+import { useState, useEffect } from 'react';
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
+import { setToken } from './services/api';
 
 function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </Router>
-  );
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setToken(token);
+      setAuth(true);
+    }
+  }, []);
+
+  return auth ? <DashboardPage /> : <LoginPage onLogin={() => setAuth(true)} />;
 }
 
 export default App;
