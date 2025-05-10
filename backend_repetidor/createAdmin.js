@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 
 mongoose.connect(process.env.MONGO_URI).then(async () => {
-  const hash = await bcrypt.hash('suaSenhaAdmin', 10);
+  const hash = await bcrypt.hash('8466', 10);
   await User.create({ username: 'admin', password: hash, role: 'admin' });
   console.log('Admin criado com sucesso!');
   process.exit();
