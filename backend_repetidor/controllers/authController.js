@@ -1,24 +1,45 @@
-// backend_repetidor/controllers/authController.js
+// controllers/authController.js
 
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
+  const { username, password, role } = req.body;
+
+  if (!username || !password || !role) {
+    return res.status(400).json({ message: 'username, password e role são obrigatórios' });
+  }
+
   try {
-    const { username, password, role } = req.body;
+    // Verifica se usuário já existe
+    const exists = await User.findOne({ username });
+    if (exists) {
+      return res.status(409).json({ message: 'Usuário já existe' });
+    }
+
+    // Cria hash da senha
     const hashed = await bcrypt.hash(password, 10);
-    await User.create({ username, password: hashed, role });
-    return res.status(201).json({ message: 'Usuário criado com sucesso' });
+
+    // Cria o usuário
+    const user = await User.create({ username, password: hashed, role });
+    return res.status(201).json({ message: 'Usuário criado com sucesso', userId: user._id });
   } catch (err) {
-    console.error('Erro no register:', err);
-    return res.status(500).json({ message: 'Erro interno ao criar usuário' });
+    console.error('Erro em authController.register:', err);
+    return res.status(500).json({
+      message: 'Erro interno ao criar o usuário',
+      error: err.message
+    });
   }
 };
 
 exports.login = async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ message: 'username e password são obrigatórios' });
+  }
+
   try {
-    const { username, password } = req.body;
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(401).json({ message: 'Usuário não encontrado' });
@@ -29,17 +50,15 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Senha incorreta' });
     }
 
-    // Geração do token JWT
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: '1d' }
+      { expiresIn: '1h' }
     );
 
-    // Aqui devolvemos o token e o papel do usuário
-    return res.status(200).json({ token, role: user.role });
+    return res.json({ token, role: user.role });
   } catch (err) {
-    console.error('Erro no login:', err);
-    return res.status(500).json({ message: 'Erro interno ao fazer login' });
+    console.error('Erro em authController.login:', err);
+    return res.status(500).json({ message: 'Erro interno no login', error: err.message });
   }
 };
