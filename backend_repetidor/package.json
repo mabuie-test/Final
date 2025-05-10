@@ -1,15 +1,17 @@
 {
   "name": "backend_repetidor",
   "version": "1.0.0",
+  "description": "Backend para monitoramento de repetidores VHF com detecção de falhas, autenticação e logs",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^7.2.2",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
-    "bcryptjs": "^2.4.3"
+    "mongoose": "^7.6.1"
   }
 }
