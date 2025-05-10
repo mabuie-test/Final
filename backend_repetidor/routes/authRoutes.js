@@ -1,15 +1,14 @@
- const express = require('express');
- const router = express.Router();
- const authController = require('../controllers/authController');
--const auth = require('../middleware/authMiddleware');
--const onlyAdmin = require('../middleware/roleMiddleware');
-+// const auth = require('../middleware/authMiddleware');
-// const onlyAdmin = require('../middleware/roleMiddleware');
+// routes/authRoutes.js
 
- // Login e registro
- router.post('/login', authController.login);
--router.post('/register', auth, onlyAdmin('admin'), authController.register);
-+// Rota de registro livre, sem autenticação
-+router.post('/register', authController.register);
+const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/authController');
 
- module.exports = router;
+// Rota de login
+router.post('/login', authController.login);
+
+// Rota de registro LIBERADA temporariamente (sem autenticação)
+// Depois de criar seu admin, lembre-se de voltar essa rota para protegida
+router.post('/register', authController.register);
+
+module.exports = router;
