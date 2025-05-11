@@ -8,11 +8,15 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const logRoutes = require('./routes/logRoutes');
 const userRoutes = require('./routes/userRoutes'); // ⬅️ adicionado
+const auditRoutes = require('./routes/auditRoutes');
+
+
 
 const app = express();
 
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
+app.use('/api/audit', auditRoutes);
 
 app.get('/api', (req, res) => {
   res.json({ message: 'API funcionando com sucesso!' });
