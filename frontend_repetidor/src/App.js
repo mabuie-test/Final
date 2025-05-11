@@ -52,7 +52,8 @@ function App() {
   };
 
   return (
-    <Router>
+    <div className="app-container">
+<Router>
       {auth && (
         <nav style={{ padding: 10, borderBottom: '1px solid #ccc' }}>
           <Link to="/dashboard" style={{ marginRight: 10 }}>Dashboard</Link>
@@ -124,7 +125,8 @@ function App() {
           element={<Navigate to={auth ? "/dashboard" : "/login"} replace />}
         />
       </Routes>
-    </Router>
+       </Router>
+  </div>
   );
 }
 
