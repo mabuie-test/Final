@@ -1,6 +1,6 @@
 // controllers/userController.js
 const User = require('../models/User');
-
+const Audit = require('../models/Audit');
 exports.createUser = async (req, res) => {
   const { username, password, role } = req.body;
   try {
@@ -14,6 +14,11 @@ exports.createUser = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
   const users = await User.find().select('-password');
+// registra auditoria de remoção
+await Audit.create({
+ action: 'delete_user',
+performedBy: req.user.id, targetUser: user.username
+});
   res.json(users);
 };
 
