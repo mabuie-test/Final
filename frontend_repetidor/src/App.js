@@ -8,10 +8,11 @@ import {
   Link,
 } from 'react-router-dom';
 
-import LoginPage from './pages/LoginPage';
-import DashboardPage from './pages/DashboardPage';
-import RepeaterList from './components/RepeaterList';
-import MapView from './components/MapView';
+import LoginPage       from './pages/LoginPage';
+import DashboardPage   from './pages/DashboardPage';
+import RepeaterList    from './components/RepeaterList';
+import MapView         from './components/MapView';
+import UsersManagement from './components/UsersManagement'; // 👈 importe aqui
 
 import { setToken } from './services/api';
 
@@ -36,8 +37,9 @@ function App() {
       {auth && (
         <nav style={{ padding: 10, borderBottom: '1px solid #ccc' }}>
           <Link to="/dashboard" style={{ marginRight: 10 }}>Dashboard</Link>
-          <Link to="/list" style={{ marginRight: 10 }}>Lista</Link>
-          <Link to="/map" style={{ marginRight: 10 }}>Mapa</Link>
+          <Link to="/list"      style={{ marginRight: 10 }}>Lista</Link>
+          <Link to="/map"       style={{ marginRight: 10 }}>Mapa</Link>
+          <Link to="/users"     style={{ marginRight: 10 }}>Usuários</Link>  {/* 👈 link para usuários */}
           <button
             onClick={() => {
               localStorage.removeItem('token');
@@ -77,8 +79,18 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* Redireciona para /login se não estiver logado */}
-        <Route path="*" element={<Navigate to={auth ? "/dashboard" : "/login"} replace />} />
+        <Route
+          path="/users"
+          element={
+            <PrivateRoute>
+              <UsersManagement />  {/* 👈 rota para gestão de usuários */}
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="*"
+          element={<Navigate to={auth ? "/dashboard" : "/login"} replace />}
+        />
       </Routes>
     </Router>
   );
