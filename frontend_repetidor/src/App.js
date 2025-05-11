@@ -13,6 +13,8 @@ import DashboardPage   from './pages/DashboardPage';
 import RepeaterList    from './components/RepeaterList';
 import MapView         from './components/MapView';
 import UsersManagement from './components/UsersManagement'; // 👈 importe aqui
+import AuditLog         from './components/AuditLog';
+
 
 import { setToken } from './services/api';
 
@@ -40,7 +42,9 @@ function App() {
           <Link to="/list"      style={{ marginRight: 10 }}>Lista</Link>
           <Link to="/map"       style={{ marginRight: 10 }}>Mapa</Link>
           <Link to="/users"     style={{ marginRight: 10 }}>Usuários</Link>  {/* 👈 link para usuários */}
-          <button
+        <Link to="/audit" style={{ marginRight: 10 }}>Histórico</Link>
+  
+  <button
             onClick={() => {
               localStorage.removeItem('token');
               setAuth(false);
@@ -91,6 +95,7 @@ function App() {
           path="*"
           element={<Navigate to={auth ? "/dashboard" : "/login"} replace />}
         />
+               <Route path="/audit" element={<PrivateRoute><AuditLog/></PrivateRoute>} />
       </Routes>
     </Router>
   );
