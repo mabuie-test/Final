@@ -7,14 +7,13 @@ const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
 const logRoutes = require('./routes/logRoutes');
+const userRoutes = require('./routes/userRoutes'); // ⬅️ adicionado
 
 const app = express();
 
-// Permite chamadas do frontend (em produção, especifique o domínio em origin)
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 
-// Rota de saúde
 app.get('/api', (req, res) => {
   res.json({ message: 'API funcionando com sucesso!' });
 });
@@ -22,8 +21,9 @@ app.get('/api', (req, res) => {
 // Montagem das rotas
 app.use('/api/auth', authRoutes);
 app.use('/api/logs', logRoutes);
+app.use('/api/users', userRoutes); // ⬅️ adicionado
 
-// Conexão ao MongoDB e start do servidor
+// Conexão ao MongoDB
 const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
