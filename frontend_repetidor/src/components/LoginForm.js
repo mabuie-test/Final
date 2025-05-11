@@ -24,7 +24,7 @@ export default function LoginForm({ onLogin }) {
   };
 
   return (
-    <form onSubmit={login}>
+    <form onSubmit={login} className="login-form">
       <input
         placeholder="Usuário"
         value={username}
