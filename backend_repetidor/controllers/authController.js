@@ -3,6 +3,7 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Audit = require('../models/Audit');
 
 exports.register = async (req, res) => {
   const { username, password, role } = req.body;
@@ -55,7 +56,11 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
-
+// registra auditoria de login
+await Audit.create({
+action: 'login',
+performedBy: username
+ });
     return res.json({ token, role: user.role });
   } catch (err) {
     console.error('Erro em authController.login:', err);
