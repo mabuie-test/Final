@@ -9,7 +9,9 @@ exports.register = async (req, res) => {
   const { username, password, role } = req.body;
 
   if (!username || !password || !role) {
-    return res.status(400).json({ message: 'username, password e role são obrigatórios' });
+    return res
+      .status(400)
+      .json({ message: 'username, password e role são obrigatórios' });
   }
 
   try {
@@ -24,7 +26,17 @@ exports.register = async (req, res) => {
 
     // Cria o usuário
     const user = await User.create({ username, password: hashed, role });
-    return res.status(201).json({ message: 'Usuário criado com sucesso', userId: user._id });
+
+    // Auditoria: criação de usuário
+    await Audit.create({
+      action: 'create_user',
+      performedBy: req.user ? req.user.id : username,
+      targetUser: username
+    });
+
+    return res
+      .status(201)
+      .json({ message: 'Usuário criado com sucesso', userId: user._id });
   } catch (err) {
     console.error('Erro em authController.register:', err);
     return res.status(500).json({
@@ -37,7 +49,9 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
-    return res.status(400).json({ message: 'username e password são obrigatórios' });
+    return res
+      .status(400)
+      .json({ message: 'username e password são obrigatórios' });
   }
 
   try {
@@ -52,18 +66,22 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, role: user.role, username: user.username },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
-// registra auditoria de login
-await Audit.create({
-action: 'login',
-performedBy: username
- });
+
+    // Auditoria: login de usuário
+    await Audit.create({
+      action: 'login',
+      performedBy: user.username
+    });
+
     return res.json({ token, role: user.role });
   } catch (err) {
     console.error('Erro em authController.login:', err);
-    return res.status(500).json({ message: 'Erro interno no login', error: err.message });
+    return res
+      .status(500)
+      .json({ message: 'Erro interno no login', error: err.message });
   }
 };
