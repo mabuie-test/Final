@@ -1,5 +1,5 @@
 import RepeaterList from '../components/RepeaterList';
-import MapView from '../components/MapView';
+import MapView     from '../components/MapView';
 
 export default function DashboardPage() {
   return (
