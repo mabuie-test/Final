@@ -82,7 +82,7 @@ export default function RepeaterManagement() {
               <td>{r.latitude}</td>
               <td>{r.longitude}</td>
               <td>
-                <button onClick={()=>handleUpdate(r._id)}>Editar</button>{' '}
+              
                 <button onClick={()=>handleDelete(r._id)}>Deletar</button>
               </td>
             </tr>
