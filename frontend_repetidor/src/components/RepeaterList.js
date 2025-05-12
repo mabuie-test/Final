@@ -2,22 +2,29 @@ import React, { useEffect, useState } from 'react';
 import api from '../services/api';
 
 export default function RepeaterList() {
-  const [logs, setLogs] = useState([]);
+  const [repeaters, setRepeaters] = useState([]);
 
   useEffect(() => {
-    api.get('/logs').then(res => setLogs(res.data));
+    api.get('/repeaters')
+      .then(res => setRepeaters(res.data))
+      .catch(err => console.error('Erro ao buscar repetidores:', err));
   }, []);
 
   return (
     <div>
-      <h2>Repetidores</h2>
-      <ul>
-        {logs.map((log, idx) => (
-          <li key={idx}>
-            <strong>{log.deviceId}</strong> - {log.status} - {new Date(log.timestamp).toLocaleString()}
-          </li>
-        ))}
-      </ul>
+      <h2>Repetidores Cadastrados</h2>
+      {repeaters.length === 0 ? (
+        <p>Nenhum repetidor cadastrado.</p>
+      ) : (
+        <ul>
+          {repeaters.map((r, idx) => (
+            <li key={r._id || idx}>
+              <strong>{r.deviceId}</strong> — {r.status} —{' '}
+              {r.latitude.toFixed(4)}, {r.longitude.toFixed(4)}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
