@@ -10,19 +10,22 @@ L.Icon.Default.mergeOptions({
 });
 
 export default function MapView() {
-  const [logs, setLogs] = useState([]);
+  const [repeaters, setRepeaters] = useState([]);
 
   useEffect(() => {
-    api.get('/logs').then(res => setLogs(res.data));
+    api.get('/repeaters')
+      .then(res => setRepeaters(res.data))
+      .catch(err => console.error('Erro ao buscar repetidores:', err));
   }, []);
 
   return (
     <MapContainer center={[-25.96, 32.58]} zoom={6} style={{ height: '300px' }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      {logs.map((log, idx) => (
-        <Marker key={idx} position={[log.latitude, log.longitude]}>
+      {repeaters.map((r, idx) => (
+        <Marker key={r._id || idx} position={[r.latitude, r.longitude]}>
           <Popup>
-            {log.deviceId} - {log.status}
+            <strong>{r.deviceId}</strong><br />
+            Status: {r.status}
           </Popup>
         </Marker>
       ))}
