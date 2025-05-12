@@ -9,6 +9,7 @@ const authRoutes  = require('./routes/authRoutes');
 const logRoutes   = require('./routes/logRoutes');
 const userRoutes  = require('./routes/userRoutes');
 const auditRoutes = require('./routes/auditRoutes');
+const repeaterRoutes = require('./routes/repeaterRoutes');
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/logs', logRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/audit', auditRoutes);
+app.use('/api/repeaters', repeaterRoutes);
+
 
 // Conexão ao MongoDB e start do servidor
 const PORT = process.env.PORT || 5000;
